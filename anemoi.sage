@@ -113,31 +113,25 @@ def circulant_mds_matrix(field, l):
             return(mat)
 
 def get_mds(field, l):
-    a = field.multiplicative_generator()
-    b = field.one()
-    t = 0
-    while True:
-        # we construct the matrix
-        mat = []
-        b = b*a
-        t += 1
-        if l <= 4:
-            for i in range(0, l):
-                x_i = [field.one() * (j == i) for j in range(0, l)]
-                if l == 2:
-                    mat.append(M_2(x_i, b))
-                elif l == 3:
-                    mat.append(M_3(x_i, b))
-                elif l == 4:
-                    mat.append(M_4(x_i, b))
-            mat = Matrix(field, l, l, mat)
-            if is_mds(mat):
-                return mat
-        # If l > 4, we default to a circulant matrix with small coefficients
-        # The matrix is identified by its first row, with coefficients
-        # lexicographically ordered.
-        else:
-            return circulant_mds_matrix(field, l)
+    b = field.multiplicative_generator()
+    mat = []
+    if l <= 4:
+        for i in range(0, l):
+            x_i = [field.one() * (j == i) for j in range(0, l)]
+            if l == 2:
+                mat.append(M_2(x_i, b))
+            elif l == 3:
+                mat.append(M_3(x_i, b))
+            elif l == 4:
+                mat.append(M_4(x_i, b))
+        mat = Matrix(field, l, l, mat)
+        if is_mds(mat):
+            return mat
+    # If l > 4, we default to a circulant matrix with small coefficients
+    # The matrix is identified by its first row, with coefficients
+    # lexicographically ordered.
+    else:
+        return circulant_mds_matrix(field, l)
 
 # AnemoiPermutation class
         
